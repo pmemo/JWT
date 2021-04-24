@@ -27,7 +27,7 @@ class JWT {
         $this->header = base64_decode($tokenParts[0]);
         $this->payload = base64_decode($tokenParts[1]);
         $this->signature = $tokenParts[2];
-        $this->algorithm = $this->algorithm ? $this->algorithm : 'HS256';
+        $this->algorithm = $this->algorithm ?: 'HS256';
         $this->expiration = isset(json_decode($this->payload)->exp) ? json_decode($this->payload)->exp : false;
     }
 
@@ -57,7 +57,7 @@ class JWT {
     public function encode() {
         $encodedHeader = self::base64UrlEncode(json_encode([
             'typ' => 'JWT',
-            'alg' => $this->algorithm
+            'alg' => $this->algorithm?:'HS256'
         ]));
         
         $encodedPayload = self::base64UrlEncode($this->payload);
